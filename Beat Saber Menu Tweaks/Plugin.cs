@@ -93,6 +93,35 @@ namespace Beat_Saber_Menu_Tweaks
 
         public void OnFixedUpdate()
         {
+            if (!inMenu) return;
+            if (hideFailCounter)
+            {
+                if (_failedLevelsCountText == null)
+                {
+                    if (stats == null)
+                    {
+                        stats = Resources.FindObjectsOfTypeAll<PlayerStatisticsViewController>().FirstOrDefault();
+                        return;
+                    }
+                    _failedLevelsCountText = ReflectionUtil.GetPrivateField<TextMeshProUGUI>(stats, "_failedLevelsCountText");
+                    return;
+                }
+                _failedLevelsCountText.text = failedLevelsCountReplacementText;
+                _failedLevelsCountText.ForceMeshUpdate(true);
+            }
+        }
+
+        public void OnLevelWasLoaded(int level)
+        {
+        }
+
+        public void OnLevelWasInitialized(int level)
+        {
+        }
+
+        public static void Log(string input)
+        {
+            Console.WriteLine("[MenuTweaks]: " + input);
         }
     }
 }
