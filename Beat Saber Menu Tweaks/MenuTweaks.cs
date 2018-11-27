@@ -12,11 +12,11 @@ namespace Beat_Saber_Menu_Tweaks
         private bool hideFailCounter = false;
         private bool loaded = false;
         private TextMeshProUGUI _failedLevelsCountText;
-        private string failedLevelsCountReplacementText = "???";
+        private string failedLevelsCountReplacementText = "HIDDEN";
 
         private void Awake()
         {
-            Plugin.Log("Menu Tweaks GameObject created!");
+            Plugin.Log("Menu Tweaks GameObject created!", Plugin.LogLevel.DebugOnly);
             StartCoroutine(WaitForLoad());
         }
 
@@ -30,7 +30,7 @@ namespace Beat_Saber_Menu_Tweaks
                     yield return new WaitForSeconds(0.01f);
                 else
                 {
-                    Plugin.Log("Found PlayerStatisticsViewController!");
+                    Plugin.Log("Found PlayerStatisticsViewController!", Plugin.LogLevel.DebugOnly);
                     loaded = true;
                 }
             }
@@ -39,13 +39,15 @@ namespace Beat_Saber_Menu_Tweaks
 
         private void Init()
         {
-            Plugin.Log("Init called for MenuTweaks!");
+            Plugin.Log("Initialized!", Plugin.LogLevel.DebugOnly);
+            failedLevelsCountReplacementText = ModPrefs.GetString("MenuTweaks", "FailedLevelsReplacementText", "HIDDEN", false);
+            ModPrefs.SetString("MenuTweaks", "FailedLevelsReplacementText", failedLevelsCountReplacementText);
+
             hideFailCounter = ModPrefs.GetBool("MenuTweaks", "HideFailCounter", false, true);
         }
 
         public void Update()
         {
-            Plugin.Log("CheckingText! hideFailCounter:" + hideFailCounter + " loaded:" + loaded);
             if (hideFailCounter && loaded)
             {
                 if (_failedLevelsCountText == null)
@@ -58,12 +60,9 @@ namespace Beat_Saber_Menu_Tweaks
                 }
                 if (_failedLevelsCountText.text != failedLevelsCountReplacementText)
                 {
-                    Plugin.Log("Replacing the _failedLevelsCountText with: " + failedLevelsCountReplacementText);
+                    Plugin.Log("Replacing the _failedLevelsCountText with: " + failedLevelsCountReplacementText, Plugin.LogLevel.Info);
                     _failedLevelsCountText.text = failedLevelsCountReplacementText;
                     _failedLevelsCountText.ForceMeshUpdate(true);
-                } else
-                {
-                    Plugin.Log("_failedLevelsCountText should be: " + failedLevelsCountReplacementText);
                 }
             }
         }
