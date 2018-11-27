@@ -43,10 +43,6 @@ namespace Beat_Saber_Menu_Tweaks
                 hideFailsToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "HideFailCounter", value); };
 
                 Plugin.Log("Menu Tweaks GameObject created!");
-
-                //////////////////////////// DISABLED
-                //var menuTweaks = new GameObject("MenuTweaks").AddComponent<MenuTweaks>();
-                //menuTweaks.enabled = true;
             }
         }
 
