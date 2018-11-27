@@ -6,7 +6,7 @@ using TMPro;
 
 namespace Beat_Saber_Menu_Tweaks
 {
-    public class MenuTweaks : MonoBehaviour
+    public class StatsScreenTweaks : MonoBehaviour
     {
         private PlayerStatisticsViewController stats;
         private bool hideFailCounter = false;
