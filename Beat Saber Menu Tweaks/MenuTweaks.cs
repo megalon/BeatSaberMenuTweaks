@@ -1,8 +1,9 @@
-using IllusionPlugin;
+﻿using IllusionPlugin;
 using UnityEngine;
 using System.Linq;
 using System.Collections;
 using TMPro;
+using System.Text.RegularExpressions;
 
 namespace Beat_Saber_Menu_Tweaks
 {
@@ -43,6 +44,8 @@ namespace Beat_Saber_Menu_Tweaks
             failedLevelsCountReplacementText = ModPrefs.GetString("MenuTweaks", "FailedLevelsReplacementText", "HIDDEN", false);
             ModPrefs.SetString("MenuTweaks", "FailedLevelsReplacementText", failedLevelsCountReplacementText);
 
+            failedLevelsCountReplacementText = emojiTranslator(failedLevelsCountReplacementText);
+
             hideFailCounter = ModPrefs.GetBool("MenuTweaks", "HideFailCounter", false, true);
         }
 
@@ -65,6 +68,15 @@ namespace Beat_Saber_Menu_Tweaks
                     _failedLevelsCountText.ForceMeshUpdate(true);
                 }
             }
+        }
+
+        // Emoji comes out brighter than the sun
+        public string emojiTranslator(string text)
+        {
+            Plugin.Log(text, Plugin.LogLevel.DebugOnly);
+            var replaced = Regex.Replace(text, "smiley", "😃");
+            Plugin.Log(replaced, Plugin.LogLevel.DebugOnly);
+            return replaced;
         }
     }
 }
