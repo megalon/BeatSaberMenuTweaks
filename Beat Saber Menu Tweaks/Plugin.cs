@@ -1,5 +1,6 @@
 ﻿using IllusionPlugin;
 using UnityEngine.SceneManagement;
+using CustomUI.BeatSaber;
 using CustomUI.Settings;
 using UnityEngine;
 using System.Linq;
@@ -14,12 +15,8 @@ namespace Beat_Saber_Menu_Tweaks
         public string Name => "Beat Saber Menu Tweaks";
         public string Version => "0.0.1";
         private static bool init = false;
-        private static bool inMenu = false;
         public static bool hideFailCounter = false;
         private BoolViewController hideFailsToggle;
-        private PlayerStatisticsViewController stats;
-        private TextMeshProUGUI _failedLevelsCountText;
-        private string failedLevelsCountReplacementText = "???";
 
         public void OnApplicationStart()
         {
@@ -33,13 +30,8 @@ namespace Beat_Saber_Menu_Tweaks
 
         private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
-            if (arg0.name != "Menu")
-            {
-                inMenu = false;
-                return;
-            }
-
-            inMenu = true;
+            if (arg0.name != "Menu") return;
+            
 
             if (!init)
             {
@@ -48,10 +40,13 @@ namespace Beat_Saber_Menu_Tweaks
                 var submenu = SettingsUI.CreateSubMenu("Menu Tweaks");
                 hideFailsToggle = submenu.AddBool("Hide Fail Counter");
                 hideFailsToggle.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "HideFailCounter", false, true); };
-                hideFailsToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "HideFailCounter", value); hideFailCounter = value; };
+                hideFailsToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "HideFailCounter", value); };
 
                 Plugin.Log("Menu Tweaks GameObject created!");
-                SharedCoroutineStarter.instance.StartCoroutine(WaitForLoad());
+
+                //////////////////////////// DISABLED
+                //var menuTweaks = new GameObject("MenuTweaks").AddComponent<MenuTweaks>();
+                //menuTweaks.enabled = true;
             }
         }
 
@@ -61,31 +56,6 @@ namespace Beat_Saber_Menu_Tweaks
             SceneManager.sceneLoaded -= SceneManager_sceneLoaded;
         }
 
-        private IEnumerator WaitForLoad()
-        {
-            bool loaded = false;
-            while (!loaded)
-            {
-                stats = Resources.FindObjectsOfTypeAll<PlayerStatisticsViewController>().FirstOrDefault();
-
-                if (stats == null)
-                    yield return new WaitForSeconds(0.01f);
-                else
-                {
-                    Plugin.Log("Found PlayerStatisticsViewController!");
-                    loaded = true;
-                }
-            }
-            Init();
-        }
-
-        public void Init()
-        {
-            init = true;
-            Plugin.Log("init!");
-            _failedLevelsCountText = ReflectionUtil.GetPrivateField<TextMeshProUGUI>(stats, "_failedLevelsCountText");
-        }
-
         public void OnUpdate()
         {
 
@@ -93,22 +63,6 @@ namespace Beat_Saber_Menu_Tweaks
 
         public void OnFixedUpdate()
         {
-            if (!inMenu) return;
-            if (hideFailCounter)
-            {
-                if (_failedLevelsCountText == null)
-                {
-                    if (stats == null)
-                    {
-                        stats = Resources.FindObjectsOfTypeAll<PlayerStatisticsViewController>().FirstOrDefault();
-                        return;
-                    }
-                    _failedLevelsCountText = ReflectionUtil.GetPrivateField<TextMeshProUGUI>(stats, "_failedLevelsCountText");
-                    return;
-                }
-                _failedLevelsCountText.text = failedLevelsCountReplacementText;
-                _failedLevelsCountText.ForceMeshUpdate(true);
-            }
         }
 
         public void OnLevelWasLoaded(int level)
