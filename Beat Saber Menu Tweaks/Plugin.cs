@@ -77,9 +77,9 @@ namespace Beat_Saber_Menu_Tweaks
         {
         }
 
-        public static void Log(string input, Plugin.LogLevel ll)
+        public static void Log(string input, Plugin.LogLevel logLvl)
         {
-            if (ll >= LogLevel.Info || debug) Console.WriteLine("[MenuTweaks]: " + input);
+            if (logLvl >= LogLevel.Info || debug) Console.WriteLine("[MenuTweaks]: " + input);
         }
     }
 }
