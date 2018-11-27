@@ -32,18 +32,15 @@ namespace Beat_Saber_Menu_Tweaks
         {
             if (arg0.name != "Menu") return;
             
+            
+            init = true;
+            Plugin.Log("Menu Tweaks Started!");
+            var submenu = SettingsUI.CreateSubMenu("Menu Tweaks");
+            hideFailsToggle = submenu.AddBool("Hide Fail Counter");
+            hideFailsToggle.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "HideFailCounter", false, true); };
+            hideFailsToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "HideFailCounter", value); };
 
-            if (!init)
-            {
-                init = true;
-                Plugin.Log("Menu Tweaks Started!");
-                var submenu = SettingsUI.CreateSubMenu("Menu Tweaks");
-                hideFailsToggle = submenu.AddBool("Hide Fail Counter");
-                hideFailsToggle.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "HideFailCounter", false, true); };
-                hideFailsToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "HideFailCounter", value); };
-
-                Plugin.Log("Menu Tweaks GameObject created!");
-            }
+            Plugin.Log("Menu Tweaks GameObject created!");
         }
 
         public void OnApplicationQuit()
