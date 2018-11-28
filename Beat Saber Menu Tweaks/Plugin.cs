@@ -12,8 +12,8 @@ namespace Beat_Saber_Menu_Tweaks
 {
     public class Plugin : IPlugin
     {
-        public string Name => "Menu Tweaks by Megalon";
-        public string Version => "0.1.0";
+        public string Name => "Menu Tweaks";
+        public string Version => "1.0.0";
 
         private StatsScreenTweaks statsScreenTweaks;
         private RippleEffectModifier rippleEffectModifier;
