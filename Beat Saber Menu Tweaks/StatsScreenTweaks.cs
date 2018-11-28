@@ -43,7 +43,7 @@ namespace Beat_Saber_Menu_Tweaks
             failedLevelsCountReplacementText = ModPrefs.GetString("MenuTweaks", "FailedCounterReplacementText", "HIDDEN", false);
             ModPrefs.SetString("MenuTweaks", "FailedLevelsReplacementText", failedLevelsCountReplacementText);
 
-            showFailCounter = ModPrefs.GetBool("MenuTweaks", "FailCounterVisible", false, true);
+            showFailCounter = ModPrefs.GetBool("MenuTweaks", "FailCounterVisible", true, true);
         }
 
         public void Update()

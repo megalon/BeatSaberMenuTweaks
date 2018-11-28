@@ -43,7 +43,7 @@ namespace Beat_Saber_Menu_Tweaks
         {
             Plugin.Log("RippleEffectModifier Initialized!", Plugin.LogLevel.DebugOnly);
 
-            clickShockwaveOn = ModPrefs.GetBool("MenuTweaks", "ClickShockwaveEnabled", false, true);
+            clickShockwaveOn = ModPrefs.GetBool("MenuTweaks", "ClickShockwaveEnabled", true, true);
         }
 
         public void Update()
