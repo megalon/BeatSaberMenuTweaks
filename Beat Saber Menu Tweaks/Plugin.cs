@@ -17,11 +17,13 @@ namespace Beat_Saber_Menu_Tweaks
 
         private StatsScreenTweaks statsScreenTweaks;
         private RippleEffectModifier rippleEffectModifier;
+        private FireworksTweaks fireworksTweaks;
 
         private BoolViewController failCounterToggle;
-        private BoolViewController disableMenuShockwave;
+        private BoolViewController menuShockwaveToggle;
+        private BoolViewController fireworksToggle;
 
-        private static bool debug = false;
+        private static bool debug = true;
 
         public enum LogLevel
         {
@@ -38,6 +40,7 @@ namespace Beat_Saber_Menu_Tweaks
 
         private void SceneManagerOnActiveSceneChanged(Scene sceneOld, Scene sceneNew)
         {
+            Plugin.Log("sceneNew Name: " + sceneNew.name, LogLevel.DebugOnly);
             if (sceneNew.name != "Menu") return;
 
             // Create the tweaks GameObjects
@@ -46,6 +49,14 @@ namespace Beat_Saber_Menu_Tweaks
 
             rippleEffectModifier = new GameObject("RippleEffectModifier").AddComponent<RippleEffectModifier>();
             rippleEffectModifier.enabled = true;
+
+            fireworksTweaks = new GameObject("FireworksTweaks").AddComponent<FireworksTweaks>();
+            fireworksTweaks.enabled = true;
+            if (sceneOld.name == "GameCore")
+            {
+                Log("Left GameCore scene", LogLevel.DebugOnly);
+                fireworksTweaks.leftGameCoreScene = true;
+            }
         }
 
         private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
@@ -65,9 +76,14 @@ namespace Beat_Saber_Menu_Tweaks
             failCounterToggle.DisabledText = "HIDDEN";
 
             // Add the Click Shockwave toggle
-            disableMenuShockwave = submenu.AddBool("Click Shockwave");
-            disableMenuShockwave.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "ClickShockwaveEnabled", true, true); };
-            disableMenuShockwave.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "ClickShockwaveEnabled", value); };
+            menuShockwaveToggle = submenu.AddBool("Click Shockwave");
+            menuShockwaveToggle.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "ClickShockwaveEnabled", true, true); };
+            menuShockwaveToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "ClickShockwaveEnabled", value); };
+
+            // Add the Fireworks toggle
+            fireworksToggle = submenu.AddBool("Fireworks");
+            fireworksToggle.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "FireworksEnabled", true, true); };
+            fireworksToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "FireworksEnabled", value); };
         }
 
         public void OnApplicationQuit()
