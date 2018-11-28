@@ -9,7 +9,7 @@ namespace Beat_Saber_Menu_Tweaks
     public class StatsScreenTweaks : MonoBehaviour
     {
         private PlayerStatisticsViewController stats;
-        private bool hideFailCounter = false;
+        private bool showFailCounter = true;
         private bool loaded = false;
         private TextMeshProUGUI _failedLevelsCountText;
         private string failedLevelsCountReplacementText = "HIDDEN";
@@ -40,15 +40,15 @@ namespace Beat_Saber_Menu_Tweaks
         private void Init()
         {
             Plugin.Log("Initialized!", Plugin.LogLevel.DebugOnly);
-            failedLevelsCountReplacementText = ModPrefs.GetString("MenuTweaks", "FailedLevelsReplacementText", "HIDDEN", false);
+            failedLevelsCountReplacementText = ModPrefs.GetString("MenuTweaks", "FailedCounterReplacementText", "HIDDEN", false);
             ModPrefs.SetString("MenuTweaks", "FailedLevelsReplacementText", failedLevelsCountReplacementText);
 
-            hideFailCounter = ModPrefs.GetBool("MenuTweaks", "HideFailCounter", false, true);
+            showFailCounter = ModPrefs.GetBool("MenuTweaks", "FailCounterVisible", false, true);
         }
 
         public void Update()
         {
-            if (hideFailCounter && loaded)
+            if (!showFailCounter && loaded)
             {
                 if (_failedLevelsCountText == null)
                 {

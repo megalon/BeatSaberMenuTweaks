@@ -14,10 +14,14 @@ namespace Beat_Saber_Menu_Tweaks
     {
         public string Name => "Beat Saber Menu Tweaks";
         public string Version => "0.0.1";
-        private BoolViewController hideFailsToggle;
-        private MenuTweaks menuTweaks;
 
-        private static bool debug = false;
+        private StatsScreenTweaks statsScreenTweaks;
+        private RippleEffectModifier rippleEffectModifier;
+
+        private BoolViewController failCounterToggle;
+        private BoolViewController disableMenuShockwave;
+
+        private static bool debug = true;
 
         public enum LogLevel
         {
@@ -41,13 +45,20 @@ namespace Beat_Saber_Menu_Tweaks
 
             Plugin.Log("Menu Tweaks Started!", LogLevel.DebugOnly);
             var submenu = SettingsUI.CreateSubMenu("Menu Tweaks");
-            hideFailsToggle = submenu.AddBool("Hide Fail Counter");
-            hideFailsToggle.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "HideFailCounter", false, true); };
-            hideFailsToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "HideFailCounter", value); };
-            
+            failCounterToggle = submenu.AddBool("Fail Counter");
+            failCounterToggle.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "FailCounterVisible", false, true); };
+            failCounterToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "FailCounterVisible", value); };
+
+            disableMenuShockwave = submenu.AddBool("Click Shockwave");
+            disableMenuShockwave.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "ClickShockwaveEnabled", false, true); };
+            disableMenuShockwave.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "ClickShockwaveEnabled", value); };
+
             // Create the MenuTweaks GameObject
-            menuTweaks = new GameObject("MenuTweaks").AddComponent<MenuTweaks>();
-            menuTweaks.enabled = true;
+            statsScreenTweaks = new GameObject("StatsScreenTweaks").AddComponent<StatsScreenTweaks>();
+            statsScreenTweaks.enabled = true;
+
+            rippleEffectModifier = new GameObject("RippleEffectModifier").AddComponent<RippleEffectModifier>();
+            rippleEffectModifier.enabled = true;
         }
 
         private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
