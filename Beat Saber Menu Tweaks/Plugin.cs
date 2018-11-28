@@ -12,8 +12,8 @@ namespace Beat_Saber_Menu_Tweaks
 {
     public class Plugin : IPlugin
     {
-        public string Name => "Beat Saber Menu Tweaks";
-        public string Version => "0.0.1";
+        public string Name => "Menu Tweaks by Megalon";
+        public string Version => "0.1.0";
 
         private StatsScreenTweaks statsScreenTweaks;
         private RippleEffectModifier rippleEffectModifier;
@@ -21,7 +21,7 @@ namespace Beat_Saber_Menu_Tweaks
         private BoolViewController failCounterToggle;
         private BoolViewController disableMenuShockwave;
 
-        private static bool debug = true;
+        private static bool debug = false;
 
         public enum LogLevel
         {
@@ -38,22 +38,9 @@ namespace Beat_Saber_Menu_Tweaks
 
         private void SceneManagerOnActiveSceneChanged(Scene sceneOld, Scene sceneNew)
         {
-            if (sceneNew.name != "Menu")
-            {
-                return;
-            }
+            if (sceneNew.name != "Menu") return;
 
-            Plugin.Log("Menu Tweaks Started!", LogLevel.DebugOnly);
-            var submenu = SettingsUI.CreateSubMenu("Menu Tweaks");
-            failCounterToggle = submenu.AddBool("Fail Counter");
-            failCounterToggle.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "FailCounterVisible", false, true); };
-            failCounterToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "FailCounterVisible", value); };
-
-            disableMenuShockwave = submenu.AddBool("Click Shockwave");
-            disableMenuShockwave.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "ClickShockwaveEnabled", false, true); };
-            disableMenuShockwave.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "ClickShockwaveEnabled", value); };
-
-            // Create the MenuTweaks GameObject
+            // Create the tweaks GameObjects
             statsScreenTweaks = new GameObject("StatsScreenTweaks").AddComponent<StatsScreenTweaks>();
             statsScreenTweaks.enabled = true;
 
@@ -63,6 +50,24 @@ namespace Beat_Saber_Menu_Tweaks
 
         private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
         {
+            if (arg0.name != "Menu") return;
+
+            Plugin.Log("Menu Tweaks Started!", LogLevel.DebugOnly);
+
+            // Create the settings menu
+            var submenu = SettingsUI.CreateSubMenu("Menu Tweaks");
+
+            // Add the Fail Counter toggle
+            failCounterToggle = submenu.AddBool("Fail Counter");
+            failCounterToggle.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "FailCounterVisible", true, true); };
+            failCounterToggle.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "FailCounterVisible", value); };
+            failCounterToggle.EnabledText = "VISIBLE";
+            failCounterToggle.DisabledText = "HIDDEN";
+
+            // Add the Click Shockwave toggle
+            disableMenuShockwave = submenu.AddBool("Click Shockwave");
+            disableMenuShockwave.GetValue += delegate { return ModPrefs.GetBool("MenuTweaks", "ClickShockwaveEnabled", true, true); };
+            disableMenuShockwave.SetValue += delegate (bool value) { ModPrefs.SetBool("MenuTweaks", "ClickShockwaveEnabled", value); };
         }
 
         public void OnApplicationQuit()
