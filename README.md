@@ -12,7 +12,9 @@ This mod adds additional settings to the Beat Saber v0.12.0 Settings menu.
 
 # Manual Install Instructions
 **1.** Make sure you have the **CustomUI** mod installed (it's in the Mod Manager!)
+
 **2.** Place `MenuTweaks.dll` inside of your Plugins folder.
+
 **3.** Change the options in game in the within the `Settings` menu
 
 Settings are saved to `UserData\modprefs.ini`
