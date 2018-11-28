@@ -13,7 +13,7 @@ namespace Beat_Saber_Menu_Tweaks
     public class Plugin : IPlugin
     {
         public string Name => "Menu Tweaks";
-        public string Version => "1.0.0";
+        public string Version => "1.1.0";
 
         private StatsScreenTweaks statsScreenTweaks;
         private RippleEffectModifier rippleEffectModifier;
@@ -23,7 +23,7 @@ namespace Beat_Saber_Menu_Tweaks
         private BoolViewController menuShockwaveToggle;
         private BoolViewController fireworksToggle;
 
-        private static bool debug = true;
+        private static bool debug = false;
 
         public enum LogLevel
         {
